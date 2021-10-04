@@ -7,21 +7,17 @@ version '1.0'
 
 repositories {
     mavenCentral()
+    maven {
+        url = 'https://raw.githubusercontent.com/bluelhf/Tasks/mvn-repo/'
+    }
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'net.bytebuddy:byte-buddy-agent:1.11.18'
+    implementation 'io.github.bluelhf:Tasks:0001'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-}
-
-processResources {
-    filesMatching('**jfxr.properties') {
-        expand(
-                'created_at': System.currentTimeMillis(),
-                'project.name': project.name,
-        )
-    }
 }
 
 test {
