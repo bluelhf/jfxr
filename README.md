@@ -1,8 +1,9 @@
 <!--suppress HtmlDeprecatedAttribute -->
-<img align=right alt="FXR logo" src="fxr.png"/><br clear="right">
-## JFXR
+<img align=right alt="FXR logo" src="fxr.png"/>
 
----
+# JFXR
+
+<br clear="right">
 JFXR is a JavaFX downloader/bundler library for Java 17. It gets rid of all the hassle of bundling JavaFX natives with your jarfiles -- instead, you add JavaFX as a compile-time only dependency and let JFXR deal with downloading everything on the first run.
 
 ### Usage 
@@ -12,7 +13,7 @@ With JFXR installed, you simply build a new instance with `JFXR.Builder` and inv
 ```java
 JFXR.builder("18-ea+3") // JavaFX version
         .modules("graphics", "base", "fxml", "controls")
-        .classifiers(Classifier.DETECT) // valid values are DETECT, WIN, LINUX, MAX, ALL
+        .classifiers(Classifier.DETECT) // valid values are DETECT, WIN, LINUX, MAC, ALL
         .callback(() -> // the callback to run when JFXR is done, should launch your JavaFX app
             JFXApplication.launch(JFXApplication.class
         ).build().call(); // build and call the JFXR
