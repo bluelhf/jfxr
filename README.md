@@ -50,7 +50,7 @@ javafx {
  */
 repositories {
     maven {
-        url "https://api.lhf.blue"
+        url "https://maven.lhf.blue"
     }
 }
 
