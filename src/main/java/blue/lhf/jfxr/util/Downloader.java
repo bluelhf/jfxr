@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Downloader {
@@ -15,7 +16,11 @@ public class Downloader {
 
     public static record Progress(long read, long total) {
     }
-    public static Executor DOWNLOAD_POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    public static ExecutorService DOWNLOAD_POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> DOWNLOAD_POOL.shutdownNow()));
+    }
 
     public static Task<Progress, Void> download(URL url, OutputStream output) throws IOException {
         URLConnection connection = url.openConnection();

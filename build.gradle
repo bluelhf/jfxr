@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 group 'blue.lhf'
@@ -10,16 +11,49 @@ repositories {
     maven {
         url = 'https://raw.githubusercontent.com/bluelhf/Tasks/mvn-repo/'
     }
+
+    maven {
+        url = 'https://gitlab.com/api/v4/projects/18568066/packages/maven'
+    }
+}
+
+javafx {
+    version = '18-ea+3'
+    modules("javafx.controls", "javafx.fxml")
+    configuration = 'testCompileOnly'
+}
+
+configurations {
+    implementation.canBeResolved(true)
+    testImplementation.canBeResolved(true)
 }
 
 dependencies {
-    implementation 'net.bytebuddy:byte-buddy-agent:1.11.18'
     implementation 'io.github.bluelhf:Tasks:0001'
+    implementation 'mx.kenzie:overlord:1.0.1'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation sourceSets.main.output
 }
 
-test {
+tasks.register('testJar', Jar) {
+    dependsOn jar
+
+    duplicatesStrategy = DuplicatesStrategy.WARN
+    from sourceSets.main.output
+    from sourceSets.test.output
+
+    from {
+        configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.testImplementation.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    manifest {
+        attributes(
+                "Main-Class": "blue.lhf.jfxr.test.JFXRTest"
+        )
+    }
+}
+
+/*test {
     useJUnitPlatform()
-}
+}*/

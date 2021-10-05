@@ -49,7 +49,7 @@ import java.util.regex.Pattern;
  *  }
  *
  */
-public enum Platform {UNKNOWN, WINDOWS, LINUX, MAC;
+public enum Platform {UNKNOWN, WIN, LINUX, MAC;
     private static final Platform platform;
     private static final int majorVersion;
     private static final int minorVersion;
@@ -58,7 +58,7 @@ public enum Platform {UNKNOWN, WINDOWS, LINUX, MAC;
         String os = System.getProperty("os.name").toLowerCase();
 
         if (os.contains("win")) {
-            platform = Platform.WINDOWS;
+            platform = Platform.WIN;
         }
         else if (os.contains("nix") || os.contains("nux")) {
             platform = Platform.LINUX;
@@ -103,8 +103,8 @@ public enum Platform {UNKNOWN, WINDOWS, LINUX, MAC;
         return minorVersion;
     }
 
-    static boolean isWindows() {
-        return getPlatform() == WINDOWS;
+    static boolean getWin() {
+        return getPlatform() == WIN;
     }
 
     static boolean isMac() {
