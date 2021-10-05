@@ -107,23 +107,17 @@ public class InstrumentationFactory {
         }
 
         JavaVendors vendor = JavaVendors.getCurrentVendor();
-        Class<?> vmClass;
-        try {
-            vmClass = Class.forName("com.sun.tools.attach.VirtualMachine");
-        } catch (ClassNotFoundException e) {
-            File toolsJar = null;
-            // When running on IBM, the attach api classes are packaged in vm.jar which is a part
-            // of the default vm classpath.
-            if (!vendor.isIBM()) {
-                // If we can't find the tools.jar and we're not on IBM we can't load the agent.
-                toolsJar = findToolsJar();
-                if (toolsJar == null) {
-                    return null;
-                }
-            }
-
-            vmClass = loadVMClass(toolsJar, vendor);
+        File toolsJar = null;
+        // When running on IBM, the attach api classes are packaged in vm.jar which is a part
+        // of the default vm classpath.
+        if (!vendor.isIBM()) {
+            // If we can't find the tools.jar and we're not on IBM we can't load the agent.
+            // EXCEPT SOMETIMES WE CAN :) for example temurin has com.sun.tools.attach included
+            toolsJar = findToolsJar();
         }
+
+        Class<?> vmClass = loadVMClass(toolsJar, vendor);
+
 
         if (vmClass == null) {
             return null;
@@ -309,8 +303,12 @@ public class InstrumentationFactory {
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             String cls = vendor.getVirtualMachineClassName();
-            if (!vendor.isIBM()) {
-                loader = new URLClassLoader(new URL[] { toolsJar.toURI().toURL() }, loader);
+            URL[] urls = new URL[1];
+            if (toolsJar != null)
+                urls[0] = toolsJar.toURI().toURL();
+
+            if (!vendor.isIBM() && toolsJar != null) {
+                loader = new URLClassLoader(urls, loader);
             }
             return loader.loadClass(cls);
         } catch (Exception ignored) {

@@ -40,7 +40,7 @@ public enum JavaVendors {
     }
 
     private static final JavaVendors _vendor;
-    private String _virtualMachineClass;
+    private final String _virtualMachineClass;
 
     JavaVendors(String vmClass) {
         _virtualMachineClass = vmClass;
