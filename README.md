@@ -15,7 +15,7 @@ JFXR.builder("18-ea+3") // JavaFX version
         .modules("graphics", "base", "fxml", "controls")
         .classifiers(Classifier.DETECT) // valid values are DETECT, WIN, LINUX, MAC, ALL
         .callback(() -> // the callback to run when JFXR is done, should launch your JavaFX app
-            JFXApplication.launch(JFXApplication.class
+            JFXApplication.launch(JFXApplication.class)
         ).build().call(); // build and call the JFXR
 ```
 
