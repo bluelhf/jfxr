@@ -1,6 +1,7 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'org.openjfx.javafxplugin' version '0.0.10'
+    id 'maven-publish'
 }
 
 group 'blue.lhf'
@@ -24,27 +25,36 @@ javafx {
 }
 
 configurations {
-    implementation.canBeResolved(true)
-    testImplementation.canBeResolved(true)
+    implementation {
+        transitive = false
+        canBeResolved = true
+    }
 }
+
 
 dependencies {
     implementation 'io.github.bluelhf:Tasks:0001'
     implementation 'mx.kenzie:overlord:1.0.1'
+    testImplementation sourceSets.main.output.filter {file -> file.exists()}
+}
 
-    testImplementation sourceSets.main.output
+jar {
+    from {
+        configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 tasks.register('testJar', Jar) {
-    dependsOn jar
+    dependsOn build
 
     duplicatesStrategy = DuplicatesStrategy.WARN
     from sourceSets.main.output
     from sourceSets.test.output
 
+    archiveClassifier = 'test'
+
     from {
         configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) }
-        configurations.testImplementation.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
     manifest {
@@ -54,6 +64,25 @@ tasks.register('testJar', Jar) {
     }
 }
 
-/*test {
-    useJUnitPlatform()
-}*/
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = String.valueOf(group)
+            artifactId = project.name
+            version = String.valueOf(project.version)
+
+            artifact jar
+        }
+    }
+
+    repositories {
+        maven {
+            name = "bluelhf"
+            url = "https://maven.lhf.blue" + (project.version.endsWith("-SNAPSHOT") ? "/snapshots" : "/releases")
+            credentials {
+                username = System.getenv("BLUELHF_USER")
+                password = System.getenv("BLUELHF_PASS")
+            }
+        }
+    }
+}
