@@ -7,6 +7,7 @@ import org.apache.openjpa.enhance.InstrumentationFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.instrument.Instrumentation;
 import java.net.URI;
 import java.nio.file.Files;
@@ -83,10 +84,14 @@ public class JFXR implements Callable<CompletableFuture<Void>> {
                         // jar may be corrupt, try re-downloading it
                     }
                 }
+                OutputStream stream = Files.newOutputStream(file);
                 tasks.add(Downloader.download(
                         data.jar().toURL(),
-                        Files.newOutputStream(file)
-                ).onResult((ThrowingConsumer<Void>) (unused) -> add(file)));
+                        stream
+                ).onResult((ThrowingConsumer<Void>) (unused) -> {
+                    stream.close();
+                    add(file);
+                }));
             }
         }
 
