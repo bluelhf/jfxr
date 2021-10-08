@@ -76,8 +76,12 @@ public class JFXR implements Callable<CompletableFuture<Void>> {
                     Files.createDirectories(outDir);
 
                 if (Files.isReadable(file)) {
-                    add(file);
-                    continue;
+                    try {
+                        add(file);
+                        continue;
+                    } catch (Exception ignored) {
+                        // jar may be corrupt, try re-downloading it
+                    }
                 }
                 tasks.add(Downloader.download(
                         data.jar().toURL(),
