@@ -35,7 +35,7 @@ Setting up JFXR in your project using Gradle is a simple task. All you need to d
  * JavaFX as a dependency as well using https://github.com/openjfx/javafx-gradle-plugin
  */
 plugins {
-    id 'org.openjfx.javafxplugin' version '0.0.10'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 javafx {
