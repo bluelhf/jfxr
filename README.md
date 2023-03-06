@@ -26,9 +26,9 @@ JFXR is a sub-class of `Callable<CompletableFuture<Void>>`, so the call() method
 - Only works on VMs that support Java Instrumentation (All JDKs since 1.5, some JREs)
 - Requires stable internet connection on the first run
 
-### Setup for Gradle 7
+### Setup for Gradle
 
-Setting up JFXR in your project using Gradle 7 is a simple task. All you need to do is merge this into your build.gradle:
+Setting up JFXR in your project using Gradle is a simple task. All you need to do is merge this into your build.gradle:
 ```kotlin
 /** 
  * You might already have this, but it defines
