@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.jar.JarFile;
 
-@SuppressWarnings({"unused", "ClassCanBeRecord"})
+@SuppressWarnings({"unused"})
 public class JFXR implements Callable<CompletableFuture<Void>> {
     // Instrumentation is used to add JARs to the System Class Loader at runtime
     protected static Instrumentation instrumentation = InstrumentationFactory.getInstrumentation();
