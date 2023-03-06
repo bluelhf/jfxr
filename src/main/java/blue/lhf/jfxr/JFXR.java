@@ -1,7 +1,6 @@
 package blue.lhf.jfxr;
 
-import blue.lhf.jfxr.util.Downloader;
-import blue.lhf.jfxr.util.ThrowingConsumer;
+import blue.lhf.jfxr.util.*;
 import io.github.bluelhf.tasks.Task;
 import org.apache.openjpa.enhance.InstrumentationFactory;
 
@@ -27,12 +26,12 @@ public class JFXR implements Callable<CompletableFuture<Void>> {
     protected final String version;
     protected final Set<String> modules;
     protected final Set<Classifier> classifiers;
-    protected final Runnable runnable;
+    protected final ThrowingRunnable runnable;
     protected final Path outDir;
 
     protected JFXR(URI repository, String group, String project, String version,
                    Set<String> modules, Set<Classifier> classifiers,
-                   Runnable runnable, Path outDir) {
+                   ThrowingRunnable runnable, Path outDir) {
         this.repository = repository;
         this.group = group;
         this.project = project;
@@ -129,7 +128,7 @@ public class JFXR implements Callable<CompletableFuture<Void>> {
         protected String version;
         protected Path outDir = Path.of(System.getProperty("java.io.tmpdir"), "jfxr");
         protected Set<Classifier> classifiers = new HashSet<>();
-        protected Runnable runnable;
+        protected ThrowingRunnable runnable;
 
         {
             classifiers.add(Classifier.DETECT);
@@ -146,7 +145,7 @@ public class JFXR implements Callable<CompletableFuture<Void>> {
             if (done) throw new IllegalStateException("Cannot use builder after it has been built");
         }
 
-        public Builder callback(Runnable runnable) {
+        public Builder callback(ThrowingRunnable runnable) {
             checkDone();
             this.runnable = runnable;
             return this;
