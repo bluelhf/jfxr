@@ -85,13 +85,18 @@ public class JFXR implements Callable<CompletableFuture<Void>> {
                     }
                 }
                 OutputStream stream = Files.newOutputStream(file);
-                tasks.add(Downloader.download(
+                try {
+                    tasks.add(Downloader.download(
                         data.jar().toURL(),
                         stream
-                ).onResult((ThrowingConsumer<Void>) (unused) -> {
+                    ).onResult((ThrowingConsumer<Void>) (unused) -> {
+                        stream.close();
+                        add(file);
+                    }));
+                } catch (IOException e) {
                     stream.close();
-                    add(file);
-                }));
+                    throw e;
+                }
             }
         }
 
