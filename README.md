@@ -60,6 +60,6 @@ repositories {
 }
 
 dependencies {
-    implementation "blue.lhf:jfxr:1.0"
+    implementation "blue.lhf:jfxr:2.0.0"
 }
 ```
